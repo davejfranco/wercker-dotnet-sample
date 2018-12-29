@@ -1,0 +1,50 @@
+build:
+  box: ubuntu:latest
+  steps:
+    # Test the project
+    - script:
+        name: Unit tests
+        code: echo "TEST"    
+        
+    - internal/docker-build: 
+        dockerfile: Dockerfile 
+        image-name: dotnet-demo-app # name used to refer to this image until it's pushed  
+
+    - internal/docker-run:
+        image: dotnet-demo-app
+        name: myTestContainer     
+    
+    - script: 
+        name: Test the container
+        code: |
+            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://myTestContainer)
+            if [[ $RESPONSE -eq 200 ]]; Then
+                echo "Test passed, response code: " $RESPONSE
+            else
+                echo "Test failed, response code: " $RESPONSE
+                exit 1
+            fi
+
+    - internal/docker-kill:
+        name: myTestContainer               
+
+    - internal/docker-push: 
+        image-name: dotnet-demo-app
+        username: $OCITENANT/$OCIUSER 
+        password: $OCITOKEN
+        registry: https://iad.ocir.io/v2
+        repository: iad.ocir.io/$OCITENANT/api
+        tag: latest, ${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
+
+deploy:  
+  
+  box:
+    id: ubuntu:latest
+
+  steps:
+
+    - kubectl:
+        server: $KUBESERVER
+        insecure-skip-tls-verify: true
+        token: $KUBETOKEN
+        command: set image deployment/api-deploy api=iad.ocir.io/$OCITENANT/api:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
