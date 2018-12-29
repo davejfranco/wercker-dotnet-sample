@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-deploy
+  labels:
+    app: dotnet-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet-app
+      environment: dev
+  template:
+    metadata:
+      labels:
+        app: dotnet-app
+        environment: dev
+    spec:
+      imagePullSecrets:
+      - name: ocirsecret
+      containers:
+      - name: api
+        imagePullPolicy: Always
+        image: iad.ocir.io/osclad007/bancochile/mini-proxy:v1.2
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  labels:
+    name: dotnet-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 80
+  selector:
+    app: dotnet-app
