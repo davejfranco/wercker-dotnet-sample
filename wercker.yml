@@ -47,4 +47,4 @@ deploy:
         server: $KUBESERVER
         insecure-skip-tls-verify: true
         token: $KUBETOKEN
-        command: set image deployment/api-deploy api=iad.ocir.io/$OCITENANT/api:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
+        command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/$OCITENANT/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}

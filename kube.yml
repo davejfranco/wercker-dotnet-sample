@@ -18,11 +18,11 @@ spec:
         environment: dev
     spec:
       imagePullSecrets:
-      - name: ocirsecret
+      - name: registryaccess
       containers:
-      - name: api
+      - name: dotnet
         imagePullPolicy: Always
-        image: iad.ocir.io/osclad007/bancochile/mini-proxy:v1.2
+        image: iad.ocir.io/davejfranco/dotnet-app
         ports:
         - containerPort: 80
 
