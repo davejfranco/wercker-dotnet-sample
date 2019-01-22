@@ -1,9 +1,9 @@
 build:
-  box: ubuntu:latest
+  box: tutum/curl
   steps:
-    - script:
-        name: wercker pre requisites 
-        code: apt update && apt install -y curl
+    # - script:
+    #     name: wercker pre requisites 
+    #     code: apt update && apt install -y curl
 
     # Test the project
     - script:
