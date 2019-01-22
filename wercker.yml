@@ -33,7 +33,7 @@ build:
         username: $OCITENANT/$OCIUSER 
         password: $OCITOKEN
         registry: https://iad.ocir.io/v2
-        repository: iad.ocir.io/$OCITENANT/api
+        repository: iad.ocir.io/$OCITENANT/dotnet-app
         tag: latest, ${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
 
 deploy:  
