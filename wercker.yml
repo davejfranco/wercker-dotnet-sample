@@ -39,7 +39,7 @@ build:
         username: $OCITENANT/$OCIUSER 
         password: $OCITOKEN
         registry: https://iad.ocir.io/v2
-        repository: iad.ocir.io/$OCITENANT/dotnetapp
+        repository: iad.ocir.io/$OCITENANT/dotnet-app
         tag: latest, ${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
 
 deploy:  
@@ -53,4 +53,4 @@ deploy:
         server: $KUBESERVER
         insecure-skip-tls-verify: true
         token: $KUBETOKEN
-        command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/davejfranco/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
+        command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/$OCITENANT/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
