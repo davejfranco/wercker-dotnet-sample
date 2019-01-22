@@ -1,5 +1,5 @@
 build:
-  box: tutum/curl
+  box: ubuntu:latest
   steps:
     # - script:
     #     name: wercker pre requisites 
@@ -14,41 +14,43 @@ build:
         dockerfile: Dockerfile 
         image-name: dotnet-demo-app # name used to refer to this image until it's pushed  
 
-    - internal/docker-run:
-        image: dotnet-demo-app
-        name: myTestContainer     
+    # - internal/docker-run:
+    #     image: dotnet-demo-app
+    #     name: myTestContainer
+    #     ports:
+    #         - 8000:80     
     
-    - script: 
-        name: Test the container
-        code: |
-            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://myTestContainer)
-            if [[ $RESPONSE -eq 200 ]]; Then
-                echo "Test passed, response code: " $RESPONSE
-            else
-                echo "Test failed, response code: " $RESPONSE
-                exit 1
-            fi
+    # - script: 
+    #     name: Test the container
+    #     code: |
+    #         RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://myTestContainer)
+    #         if [[ $RESPONSE -eq 200 ]]; Then
+    #             echo "Test passed, response code: " $RESPONSE
+    #         else
+    #             echo "Test failed, response code: " $RESPONSE
+    #             exit 1
+    #         fi
 
-    - internal/docker-kill:
-        name: myTestContainer               
+    # - internal/docker-kill:
+    #     name: myTestContainer               
 
     - internal/docker-push: 
         image-name: dotnet-demo-app
         username: $OCITENANT/$OCIUSER 
         password: $OCITOKEN
         registry: https://iad.ocir.io/v2
-        repository: iad.ocir.io/$OCITENANT/dotnet-app
+        repository: iad.ocir.io/$OCITENANT/dotnetapp
         tag: latest, ${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
 
-deploy:  
+# deploy:  
   
-  box:
-    id: ubuntu:latest
+#   box:
+#     id: ubuntu:latest
 
-  steps:
+#   steps:
 
-    - kubectl:
-        server: $KUBESERVER
-        insecure-skip-tls-verify: true
-        token: $KUBETOKEN
-        command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/$OCITENANT/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
+#     - kubectl:
+#         server: $KUBESERVER
+#         insecure-skip-tls-verify: true
+#         token: $KUBETOKEN
+#         command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/$OCITENANT/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
