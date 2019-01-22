@@ -1,6 +1,10 @@
 build:
   box: ubuntu:latest
   steps:
+    - script:
+        name: wercker pre requisites 
+        code: apt update && apt install -y curl"
+
     # Test the project
     - script:
         name: Unit tests
