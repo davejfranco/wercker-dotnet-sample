@@ -42,15 +42,15 @@ build:
         repository: iad.ocir.io/$OCITENANT/dotnetapp
         tag: latest, ${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
 
-# deploy:  
+deploy:  
   
-#   box:
-#     id: ubuntu:latest
+  box:
+    id: ubuntu:latest
 
-#   steps:
+  steps:
 
-#     - kubectl:
-#         server: $KUBESERVER
-#         insecure-skip-tls-verify: true
-#         token: $KUBETOKEN
-#         command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/$OCITENANT/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
+    - kubectl:
+        server: $KUBESERVER
+        insecure-skip-tls-verify: true
+        token: $KUBETOKEN
+        command: set image deployment/dotnet-deploy dotnet=iad.ocir.io/$OCITENANT/dotnet-app:${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
