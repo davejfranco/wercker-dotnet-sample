@@ -1,11 +1,6 @@
 build:
   box: ubuntu:latest
   steps:
-
-    # Test the project
-    - script:
-        name: Unit tests
-        code: echo "TEST"    
         
     - internal/docker-build: 
         dockerfile: Dockerfile 
@@ -18,6 +13,15 @@ build:
         registry: https://iad.ocir.io/v2
         repository: iad.ocir.io/$OCITENANT/dotnet-app
         tag: latest, ${WERCKER_GIT_BRANCH}-${WERCKER_GIT_COMMIT}
+
+test:
+  box: ubuntu:latest
+  steps:
+
+    # Test the project
+    - script:
+        name: Unit tests
+        code: echo "TEST"    
 
 deploy:  
   
